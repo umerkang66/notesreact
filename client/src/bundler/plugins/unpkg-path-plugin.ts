@@ -35,9 +35,25 @@ export const unpkgPathPlugin = () => {
       build.onResolve({ filter: /.*/ }, (args: esbuild.OnResolveArgs) => {
         // If we have file other than index.js file
         // IMPORTANT! In onResolve args.path is package name, but in onLoad args.path is package path on npm
+        let pkgPath = args.path;
+        if (!pkgPath.includes('@')) {
+          if (pkgPath === 'react' || pkgPath.startsWith('react/')) {
+            pkgPath = pkgPath.replace(/^react(\/|$)/, 'react@18.3.1$1');
+          } else if (
+            pkgPath === 'react-dom' ||
+            pkgPath.startsWith('react-dom/')
+          ) {
+            pkgPath = pkgPath.replace(/^react-dom(\/|$)/, 'react-dom@18.3.1$1');
+          } else if (
+            pkgPath === 'scheduler' ||
+            pkgPath.startsWith('scheduler/')
+          ) {
+            pkgPath = pkgPath.replace(/^scheduler(\/|$)/, 'scheduler@0.23.2$1');
+          }
+        }
         return {
           namespace: 'a',
-          path: `https://unpkg.com/${args.path}`,
+          path: `https://unpkg.com/${pkgPath}`,
         };
       });
     },

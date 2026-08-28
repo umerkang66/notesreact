@@ -14,11 +14,48 @@ interface CellsState {
   };
 }
 
+const defaultStarterCells: CellInterface[] = [
+  {
+    id: 'intro-cell',
+    type: 'text',
+    content:
+      '# notesreact\n\nThis is an interactive coding environment. You can write JavaScript and React, see it executed live, and write comprehensive documentation using markdown.\n\n- Click any text cell to edit it.\n- Click **+ Code** to add a new code cell.\n- Call `show(<Component />)` to render React components to the preview window.',
+  },
+  {
+    id: 'counter-cell',
+    type: 'code',
+    content: `import { useState } from 'react';
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ textAlign: 'center', fontFamily: 'sans-serif', padding: '24px' }}>
+      <h2>Interactive Counter</h2>
+      <h1 style={{ fontSize: '48px', margin: '16px 0', color: count >= 0 ? '#3182ce' : '#e53e3e' }}>
+        {count}
+      </h1>
+      <div>
+        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(c => c - 1)}>-</button>
+        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(0)}>Reset</button>
+        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(c => c + 1)}>+</button>
+      </div>
+    </div>
+  );
+};
+
+show(<Counter />);`,
+  },
+];
+
 const initialState: CellsState = {
   loading: false,
   error: null,
-  order: [],
-  data: {},
+  order: defaultStarterCells.map(c => c.id),
+  data: defaultStarterCells.reduce((acc, cell) => {
+    acc[cell.id] = cell;
+    return acc;
+  }, {} as CellsState['data']),
 };
 
 const cellsReducer = produce(
@@ -43,8 +80,15 @@ const cellsReducer = produce(
         return state;
 
       case ActionType.FETCH_CELLS_ERROR:
-        state.loading = true;
+        state.loading = false;
         state.error = action.payload;
+        if (state.order.length === 0) {
+          state.order = defaultStarterCells.map(c => c.id);
+          state.data = defaultStarterCells.reduce((acc, cell) => {
+            acc[cell.id] = cell;
+            return acc;
+          }, {} as CellsState['data']);
+        }
         return state;
 
       case ActionType.UPDATE_CELL:

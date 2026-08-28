@@ -5,7 +5,7 @@ import localforage from 'localforage';
 // Creating the caching layer between requests that is going to be made to unpkg
 const fileCache = localforage.createInstance({
   // Name is name of this DB (indexedDB)
-  name: 'fileCache',
+  name: 'fileCache-v2',
 });
 
 export const fetchPlugin = (userCode: string) => {
@@ -51,12 +51,17 @@ export const fetchPlugin = (userCode: string) => {
           document.head.appendChild(style);
         `;
 
+        const responseURL =
+          request?.responseURL ||
+          (request?.res && request.res.responseUrl) ||
+          args.path;
+
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
           contents,
           // It is going to be provided to the next file that we tried to require, in other words where we found nested package
           // Tell where we find the last file we are looking for
-          resolveDir: new URL('./', request.responseURL).pathname,
+          resolveDir: new URL('./', responseURL).pathname,
         };
 
         // Then store result obj in cache
@@ -68,12 +73,17 @@ export const fetchPlugin = (userCode: string) => {
       build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
         const { data, request } = await axios.get(args.path);
 
+        const responseURL =
+          request?.responseURL ||
+          (request?.res && request.res.responseUrl) ||
+          args.path;
+
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
           contents: data,
           // It is going to be provided to the next file that we tried to require, in other words where we found nested package
           // Tell where we find the last file we are looking for
-          resolveDir: new URL('./', request.responseURL).pathname,
+          resolveDir: new URL('./', responseURL).pathname,
         };
 
         // Then store result obj in cache

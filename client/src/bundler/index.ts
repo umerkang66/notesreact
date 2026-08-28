@@ -15,13 +15,17 @@ const bundler = async (rawCode: string): Promise<BundlerReturnType> => {
 
   // If service is not defined create the service
   if (!service) {
-    service = await esbuild.startService({
-      worker: true,
-      // Fetch the web assembly binary that is in the public directory
-      // wasmURL: '/esbuild.wasm',
-      // From the unpkg npm
-      wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
-    });
+    try {
+      service = await esbuild.startService({
+        worker: true,
+        wasmURL: '/esbuild.wasm',
+      });
+    } catch {
+      service = await esbuild.startService({
+        worker: true,
+        wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
+      });
+    }
   }
 
   // ALSO SHOW THE BUNDLE ERRORS IN THE I_FRAME

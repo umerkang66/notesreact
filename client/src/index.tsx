@@ -2,11 +2,20 @@ import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-
-// Components
 import CellList from './components/cell-list';
-// State
 import { store } from './state';
+
+// Suppress benign ResizeObserver loop error overlay from react-resizable / monaco-editor
+window.addEventListener('error', (e: ErrorEvent) => {
+  if (
+    e.message &&
+    (e.message.includes('ResizeObserver') ||
+      e.message.includes('ResizeObserver loop completed with undelivered notifications') ||
+      e.message.includes('ResizeObserver loop limit exceeded'))
+  ) {
+    e.stopImmediatePropagation();
+  }
+});
 
 const App = () => {
   return (

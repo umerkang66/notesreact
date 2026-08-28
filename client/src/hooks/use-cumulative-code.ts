@@ -7,7 +7,7 @@ import { showFunc, showFuncNoop } from '../utils/showFunc';
 export const useCumulativeCode = (currentCellId: string): string => {
   const cumulativeCode = useTypedSelector(state => {
     const { data, order } = state.cells;
-    const orderedCells = order.map(cellId => data[cellId]);
+    const orderedCells = order.map(cellId => data[cellId]).filter(Boolean);
 
     const cumulativeCodeArr = [];
 

@@ -45,24 +45,25 @@ const Preview: FC<PreviewProps> = ({ code, err }) => {
   const iFrameRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
+    const iframe = iFrameRef.current;
+    if (!iframe) return;
+
     // Reset the iframe html content
-    if (iFrameRef.current) iFrameRef.current.srcdoc = html;
+    iframe.srcdoc = html;
 
-    // By setting this timeout, browser should have time to update the html, then send the postMessage handler request
-    setTimeout(() => {
-      if (iFrameRef.current && iFrameRef.current.contentWindow) {
-        // Send the bundled and transpiled code to iFrame. This is actually emit the message Event on Window, that we have already handled in the srcDoc html script tag
-
-        // This property will be present on event.data
-        iFrameRef.current.contentWindow.postMessage(
-          code,
-          // * means allows all domains
-          '*'
-        );
+    const sendMessage = () => {
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(code, '*');
       }
-    }, 50);
+    };
 
-    // Whenever code changes run this useEffect
+    iframe.addEventListener('load', sendMessage);
+    const timer = setTimeout(sendMessage, 50);
+
+    return () => {
+      iframe.removeEventListener('load', sendMessage);
+      clearTimeout(timer);
+    };
   }, [code]);
 
   return (
@@ -70,11 +71,7 @@ const Preview: FC<PreviewProps> = ({ code, err }) => {
       <iframe
         ref={iFrameRef}
         title="code-preview"
-        srcDoc={html}
-        // Get access from parent to child is allowed
-        // if sandbox="", it is not allowed
-        // sandbox="allow-same-origin", here it is allowed
-        sandbox="allow-scripts" // here only scripts that are provided through html (srcDoc) are allows
+        sandbox="allow-scripts"
       />
       {err && <div className="preview-error">{err}</div>}
     </div>

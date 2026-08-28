@@ -1,4 +1,4 @@
-# JSNote
+# notesreact
 
 An interactive browser-based JavaScript and React coding environment with Markdown support. Run React Snippets in code cells and write comprehensive documentation in markdown cells directly from your terminal.
 
@@ -12,7 +12,7 @@ This project uses a **Simple Architecture** (standalone, no Lerna):
 ## Installation
 
 ```bash
-npm install -g jsnote-umer
+npm install -g notesreact
 ```
 
 ## Usage
@@ -20,13 +20,13 @@ npm install -g jsnote-umer
 Start the interactive notebook:
 
 ```bash
-jsnote-umer serve
+notesreact serve
 ```
 
 Specify a custom file name or port:
 
 ```bash
-jsnote-umer serve my-notes.js --port 4005
+notesreact serve my-notes.js --port 4005
 ```
 
 ## Development

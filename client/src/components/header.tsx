@@ -52,7 +52,7 @@ const Header: FC = () => {
         <button
           className="btn-icon danger"
           onClick={() => setShowResetConfirm(true)}
-          title="Reset Notebook (Clear all cells)"
+          title="Reset Notebook (Restore default examples)"
         >
           <i className="fas fa-rotate-left"></i>
         </button>
@@ -77,8 +77,8 @@ const Header: FC = () => {
           <div className="modal-content" style={{ maxWidth: '440px' }} onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>
-                <i className="fas fa-exclamation-triangle" style={{ color: 'var(--danger)' }}></i>
-                Reset Notebook?
+                <i className="fas fa-rotate-left" style={{ color: 'var(--primary)' }}></i>
+                Reset to Default Examples?
               </h3>
               <button
                 className="btn-icon"
@@ -89,7 +89,7 @@ const Header: FC = () => {
             </div>
             <div className="modal-body">
               <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: '1.6', marginBottom: '20px' }}>
-                Are you sure you want to remove all cells from the notebook? This action cannot be undone.
+                This will reset your notebook and reload the full suite of starter examples (Plain counter, Styled counter card, Axios API fetcher, and Tailwind dashboard component).
               </p>
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                 <button
@@ -99,11 +99,11 @@ const Header: FC = () => {
                   Cancel
                 </button>
                 <button
-                  className="btn-danger"
+                  className="btn-primary"
                   onClick={handleResetConfirm}
                 >
-                  <i className="fas fa-trash-alt"></i>
-                  Reset All
+                  <i className="fas fa-rotate-left"></i>
+                  Reset & Load Examples
                 </button>
               </div>
             </div>

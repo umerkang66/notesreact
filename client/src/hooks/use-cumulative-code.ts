@@ -3,13 +3,14 @@ import { useTypedSelector } from './use-typed-selector';
 
 // Utils
 import { showFunc, showFuncNoop } from '../utils/showFunc';
+import { deduplicateImports } from '../utils/code-deduplicator';
 
 export const useCumulativeCode = (currentCellId: string): string => {
   const cumulativeCode = useTypedSelector(state => {
     const { data, order } = state.cells;
     const orderedCells = order.map(cellId => data[cellId]).filter(Boolean);
 
-    const cumulativeCodeArr = [];
+    const cumulativeCodeArr: string[] = [];
 
     for (const c of orderedCells) {
       if (c.type === 'code') {
@@ -28,6 +29,6 @@ export const useCumulativeCode = (currentCellId: string): string => {
     return cumulativeCodeArr;
   });
 
-  // Bundle the cumulative code (joining that code by new line)
-  return cumulativeCode.join('\n');
+  // Deduplicate and hoist all import statements to prevent re-declaration errors
+  return deduplicateImports(cumulativeCode);
 };

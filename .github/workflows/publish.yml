@@ -30,6 +30,11 @@ jobs:
       - name: Build packages (client & server)
         run: npm run build
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Publish to npm
         run: npm run publishnpm
         env:

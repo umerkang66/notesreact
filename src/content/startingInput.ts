@@ -1,57 +1,75 @@
 export const startingInput = [
   {
-    content:
-      '# notesreact\n\nThis is an interactive coding environment. You can write JavaScript, see it executed, and write comprehensive documentation using markdown.\n\n- Click any text cell, including this one to edit the cell.\n- The code in each editor is all joined together in one file, if you have define a variable in cell #1, you can refer to it in any following cell.\n- You can show any react component, string, number or anything else by calling the ```show()``` function. This function is build into this environment. Call show multiple times to show multiple values.\n- Reorder or delete cells using the buttons on the top right.\n- Add new cells by hovering on the divider between cells.',
+    content: `# notesreact Interactive Notebook
+
+Welcome to **notesreact** — an interactive coding environment for modern JavaScript, React, and Markdown.
+
+### Key Features
+- **Live React Execution**: Call \`show(<Component />)\` to render any React element or JS value directly.
+- **On-Demand npm Imports**: Directly \`import axios from 'axios'\` or any npm library (automatically fetched via unpkg).
+- **Tailwind CSS Ready**: Write standard Tailwind utility classes in your components.
+- **Cumulative Scope**: Functions, variables, and imported packages declared in previous cells remain accessible in later cells.
+- **Rich Markdown**: Click any text cell to edit notes, formulas, and documentation.`,
     id: 'intro-cell',
     type: 'text',
   },
   {
     content: `import { useState } from 'react';
 
-const Counter = () => {
+// 1. Plain React Counter
+const PlainCounter = () => {
   const [count, setCount] = useState(0);
 
   return (
-    <div>
-      <h1>Counter: {count}</h1>
+    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+      <h3 style={{ margin: '0 0 10px 0' }}>Plain Counter</h3>
+      <p style={{ margin: '0 0 14px 0' }}>
+        Current count: <strong>{count}</strong>
+      </p>
       <button onClick={() => setCount(count - 1)}>-</button>
-      <button onClick={() => setCount(0)}>Reset</button>
+      <button onClick={() => setCount(0)} style={{ margin: '0 8px' }}>
+        Reset
+      </button>
       <button onClick={() => setCount(count + 1)}>+</button>
     </div>
   );
 };
 
-show(<Counter />);`,
+show(<PlainCounter />);`,
     id: 'counter-plain-cell',
     type: 'code',
   },
   {
-    content: `const StyledCounter = () => {
+    content: `import { useState } from 'react';
+
+// 2. Styled Counter Card
+const StyledCounter = () => {
   const [count, setCount] = useState(0);
 
   return (
     <div
       style={{
-        fontFamily: 'system-ui, sans-serif',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
         padding: '24px',
         maxWidth: '320px',
         margin: '16px auto',
-        borderRadius: '12px',
-        background: '#f8fafc',
-        border: '1px solid #e2e8f0',
+        borderRadius: '16px',
+        background: '#1e293b',
+        color: '#f8fafc',
+        border: '1px solid #334155',
         textAlign: 'center',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
       }}
     >
-      <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#1e293b' }}>
-        Styled Counter
-      </h3>
+      <h4 style={{ margin: '0 0 4px 0', fontSize: '15px', color: '#94a3b8' }}>
+        Interactive Metrics
+      </h4>
       <div
         style={{
-          fontSize: '40px',
-          fontWeight: 700,
+          fontSize: '44px',
+          fontWeight: 800,
           margin: '12px 0',
-          color: count >= 0 ? '#4f46e5' : '#ef4444',
+          color: count >= 0 ? '#38bdf8' : '#f87171',
         }}
       >
         {count}
@@ -60,9 +78,10 @@ show(<Counter />);`,
         <button
           style={{
             padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #cbd5e1',
-            background: '#ffffff',
+            borderRadius: '8px',
+            border: '1px solid #475569',
+            background: '#334155',
+            color: '#f8fafc',
             cursor: 'pointer',
             fontWeight: 600,
           }}
@@ -73,9 +92,10 @@ show(<Counter />);`,
         <button
           style={{
             padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #cbd5e1',
-            background: '#ffffff',
+            borderRadius: '8px',
+            border: '1px solid #475569',
+            background: '#334155',
+            color: '#94a3b8',
             cursor: 'pointer',
             fontWeight: 600,
           }}
@@ -86,9 +106,9 @@ show(<Counter />);`,
         <button
           style={{
             padding: '8px 16px',
-            borderRadius: '6px',
+            borderRadius: '8px',
             border: 'none',
-            background: '#4f46e5',
+            background: '#2563eb',
             color: '#ffffff',
             cursor: 'pointer',
             fontWeight: 600,
@@ -104,6 +124,177 @@ show(<Counter />);`,
 
 show(<StyledCounter />);`,
     id: 'counter-styled-cell',
+    type: 'code',
+  },
+  {
+    content: `import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+// 3. Fetching Data from Public API (JSONPlaceholder)
+const UserDirectory = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/users')
+      .then(res => {
+        setUsers(res.data.slice(0, 4));
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ padding: '24px', fontFamily: 'sans-serif', textAlign: 'center', color: '#64748b' }}>
+        ⏳ Fetching live data from API...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '20px', color: '#ef4444', fontFamily: 'sans-serif' }}>
+        Error loading data: {error}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ fontFamily: 'system-ui, sans-serif', padding: '16px', maxWidth: '440px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <h4 style={{ margin: 0, fontSize: '16px', color: '#1e293b' }}>Team Members</h4>
+        <span style={{ fontSize: '12px', background: '#e0f2fe', color: '#0284c7', padding: '2px 8px', borderRadius: '999px', fontWeight: 600 }}>
+          {users.length} loaded
+        </span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {users.map(user => (
+          <div
+            key={user.id}
+            style={{
+              padding: '10px 14px',
+              borderRadius: '8px',
+              border: '1px solid #e2e8f0',
+              background: '#f8fafc',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <div>
+              <strong style={{ fontSize: '13.5px', color: '#0f172a' }}>{user.name}</strong>
+              <div style={{ fontSize: '11.5px', color: '#64748b' }}>{user.email}</div>
+            </div>
+            <span style={{ fontSize: '11px', color: '#0284c7', fontWeight: 500 }}>
+              {user.company.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+show(<UserDirectory />);`,
+    id: 'api-fetch-cell',
+    type: 'code',
+  },
+  {
+    content: `import { useState } from 'react';
+
+// 4. Modern Component with Tailwind CSS Styling
+const TailwindCard = () => {
+  const [likes, setLikes] = useState(42);
+  const [isLiked, setIsLiked] = useState(false);
+  const [activeTab, setActiveTab] = useState('metrics');
+
+  const handleLike = () => {
+    setLikes(prev => (isLiked ? prev - 1 : prev + 1));
+    setIsLiked(!isLiked);
+  };
+
+  return (
+    <div className="p-6 max-w-md mx-auto bg-slate-900 text-slate-100 rounded-2xl shadow-xl border border-slate-800 transition-all">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 font-bold">
+            NR
+          </div>
+          <div>
+            <h4 className="font-semibold text-white leading-tight">Live Node Monitor</h4>
+            <p className="text-xs text-slate-400">Tailwind CSS Component</p>
+          </div>
+        </div>
+        <span className="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">
+          Active
+        </span>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-2 my-4 bg-slate-800/60 p-1 rounded-lg">
+        {['metrics', 'activity'].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={\`flex-1 py-1.5 text-xs font-medium rounded-md capitalize transition-colors \${
+              activeTab === tab
+                ? 'bg-sky-500 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }\`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'metrics' ? (
+        <div className="grid grid-cols-2 gap-3 mb-5">
+          <div className="p-3 bg-slate-800/40 rounded-xl border border-slate-800">
+            <span className="text-xs text-slate-400">Bundler Speed</span>
+            <p className="text-lg font-bold text-sky-400 mt-1">~12ms</p>
+          </div>
+          <div className="p-3 bg-slate-800/40 rounded-xl border border-slate-800">
+            <span className="text-xs text-slate-400">Memory Load</span>
+            <p className="text-lg font-bold text-emerald-400 mt-1">Optimal</p>
+          </div>
+        </div>
+      ) : (
+        <div className="p-3 bg-slate-800/40 rounded-xl border border-slate-800 mb-5 text-xs text-slate-300">
+          <p>⚡ Fast in-browser esbuild bundling with dynamic unpkg resolution.</p>
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-2">
+        <span className="text-xs text-slate-400 font-mono">
+          {likes} total likes
+        </span>
+        <button
+          onClick={handleLike}
+          className={\`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all transform active:scale-95 \${
+            isLiked
+              ? 'bg-sky-500 text-white shadow-md shadow-sky-500/25'
+              : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+          }\`}
+        >
+          <span>{isLiked ? '💙' : '🤍'}</span>
+          <span>{isLiked ? 'Liked' : 'Like'}</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+show(<TailwindCard />);`,
+    id: 'tailwind-cell',
     type: 'code',
   },
 ];

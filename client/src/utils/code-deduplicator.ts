@@ -15,30 +15,27 @@ export const deduplicateImports = (codeChunks: string[]): string => {
   const moduleMap = new Map<string, ModuleImports>();
   const cleanedChunks: string[] = [];
 
-  // Match import statements, including multiline imports
-  // e.g. import React, { useState } from 'react';
-  // e.g. import * as React from 'react';
-  // e.g. import axios from 'axios';
-  // e.g. import 'bulmaswatch/default/bulmaswatch.min.css';
-  const generalImportRegex = /(^|\n)\s*import\s+([\s\S]*?from\s+)?['"]([^'"]+)['"]\s*;?/g;
+  // Match import statements precisely without cross-matching multiple statements
+  // Negative lookahead ((?:(?!import)[\s\S])+?) ensures the clause never matches across other import statements
+  const importRegex = /(?:^|\n)[ \t]*import(?:[ \t]+((?:(?!import)[\s\S])+?)[ \t]+from)?[ \t]+['"]([^'"]+)['"][ \t]*;?/g;
 
   for (const chunk of codeChunks) {
     if (!chunk) continue;
 
     let cleaned = chunk;
-    generalImportRegex.lastIndex = 0;
+    importRegex.lastIndex = 0;
     let match: RegExpExecArray | null;
 
     const importsToProcess: { fullMatch: string; clause?: string; modulePath: string }[] = [];
 
-    while ((match = generalImportRegex.exec(chunk)) !== null) {
+    while ((match = importRegex.exec(chunk)) !== null) {
       const fullMatch = match[0];
-      const clause = match[2];
-      const modulePath = match[3];
+      const clause = match[1] ? match[1].trim() : undefined;
+      const modulePath = match[2];
 
       importsToProcess.push({
         fullMatch,
-        clause: clause ? clause.replace(/from\s*$/, '').trim() : undefined,
+        clause,
         modulePath,
       });
     }
@@ -58,7 +55,7 @@ export const deduplicateImports = (codeChunks: string[]): string => {
       if (!clause) {
         mod.isSideEffect = true;
       } else {
-        let remaining = clause.trim();
+        let remaining = clause;
 
         // Check for named imports {...}
         const namedMatch = remaining.match(/\{([^}]*)\}/);
@@ -95,6 +92,11 @@ export const deduplicateImports = (codeChunks: string[]): string => {
   const hoistedImports: string[] = [];
 
   moduleMap.forEach((mod, modulePath) => {
+    // Pure side-effect import
+    if (mod.isSideEffect) {
+      hoistedImports.push(`import '${modulePath}';`);
+    }
+
     // Default imports
     mod.defaultImports.forEach(def => {
       hoistedImports.push(`import ${def} from '${modulePath}';`);
@@ -108,11 +110,6 @@ export const deduplicateImports = (codeChunks: string[]): string => {
     // Named imports
     if (mod.namedImports.size > 0) {
       hoistedImports.push(`import { ${Array.from(mod.namedImports).join(', ')} } from '${modulePath}';`);
-    }
-
-    // Pure side-effect import
-    if (mod.isSideEffect && mod.defaultImports.size === 0 && mod.namespaceImports.size === 0 && mod.namedImports.size === 0) {
-      hoistedImports.push(`import '${modulePath}';`);
     }
   });
 

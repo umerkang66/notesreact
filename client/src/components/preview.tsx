@@ -6,11 +6,11 @@ interface PreviewProps {
   err: string;
 }
 
-const html = `
+const getHtml = (hasTailwind: boolean) => `
   <!DOCTYPE html>
   <html>
     <head>
-      <script src="https://cdn.tailwindcss.com"></script>
+      ${hasTailwind ? '<script src="https://cdn.tailwindcss.com"></script>' : ''}
       <style>
         html, body {
           background-color: white;
@@ -25,7 +25,9 @@ const html = `
       <script>
         const handleError = (err) => {
           const root = document.getElementById('root');
-          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+          if (root) {
+            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+          }
           console.error(err);
         };
 
@@ -53,7 +55,13 @@ const Preview: FC<PreviewProps> = ({ code, err }) => {
     const iframe = iFrameRef.current;
     if (!iframe) return;
 
-    iframe.srcdoc = html;
+    const hasTailwind =
+      code.includes('__has_tailwind__') ||
+      code.includes('tailwindcss') ||
+      code.includes('tailwind') ||
+      code.includes('cdn.tailwindcss.com');
+
+    iframe.srcdoc = getHtml(hasTailwind);
 
     const sendMessage = () => {
       if (iframe && iframe.contentWindow) {

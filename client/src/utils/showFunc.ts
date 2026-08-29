@@ -16,6 +16,7 @@ export const showFunc = (): string => {
       if (typeof value === 'object' && value !== null) {
         if (value.$$typeof) {
           // JSX ELEMENT
+          _root.innerHTML = '';
           if (_ReactDOM && _ReactDOM.createRoot) {
             const root = _ReactDOM.createRoot(_root);
             root.render(value);

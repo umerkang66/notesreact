@@ -25,6 +25,23 @@ export const fetchPlugin = (userCode: string) => {
         };
       });
 
+      // Special handler for importing 'tailwindcss'
+      build.onLoad({ filter: /.*tailwindcss.*/ }, async (args: esbuild.OnLoadArgs) => {
+        const contents = `
+          window.__has_tailwind__ = true;
+          if (!document.querySelector('script[data-tailwind]')) {
+            const script = document.createElement('script');
+            script.setAttribute('data-tailwind', 'true');
+            script.src = 'https://cdn.tailwindcss.com';
+            document.head.appendChild(script);
+          }
+        `;
+        return {
+          loader: 'jsx',
+          contents,
+        };
+      });
+
       // This is for caching if it got results, it will not go to the next handlers, if it didn't caught results, then it will go to the next handlers
       build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
         // Check to see if we have already fetched this file, if it is return it immediately, otherwise allow the request to happen

@@ -222,7 +222,8 @@ show(<UserDirectory />);`,
   {
     id: 'tailwind-cell',
     type: 'code',
-    content: `import { useState } from 'react';
+    content: `import 'tailwindcss';
+import { useState } from 'react';
 
 // 4. Modern Component with Tailwind CSS Styling
 const TailwindCard = () => {

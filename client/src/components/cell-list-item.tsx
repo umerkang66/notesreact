@@ -19,7 +19,7 @@ const CellListItem: FC<CellListItemProps> = ({ cell, index }) => {
           {cell.type === 'code' ? (
             <span className="cell-badge code">
               <i className="fas fa-code"></i>
-              <span>JavaScript</span>
+              <span>JS/TS</span>
             </span>
           ) : (
             <span className="cell-badge text">

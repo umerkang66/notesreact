@@ -20,7 +20,7 @@
     "build": "npm run build:client && npm run build:server",
     "prepublishOnly": "npm run build",
     "publishnpm": "npm version patch && npm publish",
-    "pathpush": "npm version patch && git push"
+    "patchpush": "npm version patch && git push"
   },
   "keywords": [
     "javascript",

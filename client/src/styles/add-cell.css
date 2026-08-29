@@ -1,34 +1,78 @@
+/* Add Cell Inserter */
 .add-cell {
   position: relative;
-  opacity: 0;
-  transition: opacity 0.2s ease-in 0.1s;
-  margin: 15px 0;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  opacity: 0.15;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
-.add-cell:hover {
+.add-cell:hover,
+.add-cell.force-visible {
   opacity: 1;
 }
 
-.force-visible {
-  opacity: 1;
-}
-
-.add-cell .divider {
+.add-cell .divider-line {
   position: absolute;
   top: 50%;
-  bottom: 50%;
-  right: 2.5%;
-  left: 2.5%;
-  border-bottom: 1px solid gray;
-  width: 90%;
-  z-index: -1;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-medium);
+  z-index: 1;
+  transition: background var(--transition-fast);
+}
+
+.add-cell:hover .divider-line {
+  background: var(--border-focus);
 }
 
 .add-cell .add-buttons {
+  position: relative;
+  z-index: 2;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-app);
+  padding: 0 12px;
 }
 
-.add-cell .add-buttons button {
-  margin: 0 20px;
+.add-cell .btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-fast);
+}
+
+.add-cell .btn-add:hover {
+  transform: translateY(-1px) scale(1.02);
+  color: var(--text-main);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.add-cell .btn-add.code-btn:hover {
+  border-color: var(--success);
+  color: var(--success);
+  background: var(--code-badge-bg);
+}
+
+.add-cell .btn-add.text-btn:hover {
+  border-color: var(--primary);
+  color: var(--text-badge-text);
+  background: var(--text-badge-bg);
+}
+
+.add-cell .btn-add i {
+  font-size: 11px;
 }

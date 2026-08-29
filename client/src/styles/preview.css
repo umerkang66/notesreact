@@ -1,28 +1,52 @@
+/* Preview Window */
 .preview-wrapper {
   position: relative;
   height: 100%;
   flex-grow: 1;
+  background-color: #ffffff;
+  overflow: hidden;
 }
 
-.preview-wrapper iframe {
+.preview-iframe {
   height: 100%;
   width: 100%;
+  border: none;
+  background-color: #ffffff;
+  display: block;
 }
 
 .preview-error {
   position: absolute;
   top: 10px;
   left: 10px;
-  color: red;
+  right: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* When users drag this class is being added on the body itself, and we can check if this class exist, only then add the content after property */
-.react-draggable-transparent-selection .preview-wrapper:after {
+.preview-error-header {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #b91c1c;
+}
+
+/* Draggable barrier to prevent iframe pointer events hijacking drag */
+.react-draggable-transparent-selection .preview-wrapper::after {
   content: '';
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  opacity: 0;
+  z-index: 999;
 }

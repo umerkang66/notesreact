@@ -1,7 +1,9 @@
-import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import './styles/main.css';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from './context/theme-context';
+import Header from './components/header';
 import CellList from './components/cell-list';
 import { store } from './state';
 
@@ -19,9 +21,14 @@ window.addEventListener('error', (e: ErrorEvent) => {
 
 const App = () => {
   return (
-    <div>
-      <CellList />
-    </div>
+    <ThemeProvider>
+      <div className="app-layout">
+        <Header />
+        <main className="main-content">
+          <CellList />
+        </main>
+      </div>
+    </ThemeProvider>
   );
 };
 
@@ -31,4 +38,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-

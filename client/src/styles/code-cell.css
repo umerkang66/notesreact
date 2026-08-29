@@ -1,27 +1,47 @@
+/* Code Cell Layout */
+.code-cell-container {
+  height: calc(100% - 8px);
+  display: flex;
+  flex-direction: row;
+  background-color: var(--bg-card);
+}
+
 .progress-wrapper {
   height: 100%;
   flex-grow: 1;
-  background-color: white;
+  background-color: var(--bg-card);
+  position: relative;
 }
 
 .progress-cover {
   height: 100%;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding-left: 10%;
-  padding-right: 10%;
-  animation: fadeIn 0.5s;
+  justify-content: center;
+  gap: 12px;
+  background-color: var(--bg-card-secondary);
+  animation: fadeIn 0.2s ease-in;
 }
 
-@keyframes faceIn {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.loader-spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--border-medium);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+
+.loader-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -1,9 +1,71 @@
+/* Cell List Item Card */
 .cell-list-item {
   position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
-.action-bar-wrapper {
-  height: 30px;
+.cell-list-item:hover,
+.cell-list-item:focus-within {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--border-focus);
+}
+
+.cell-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--bg-card-header);
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 38px;
+}
+
+.cell-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cell-index {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-button-ghost);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
+.cell-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.cell-badge.code {
+  background: var(--code-badge-bg);
+  color: var(--code-badge-text);
+  border: 1px solid var(--code-badge-border);
+}
+
+.cell-badge.text {
+  background: var(--text-badge-bg);
+  color: var(--text-badge-text);
+  border: 1px solid var(--text-badge-border);
+}
+
+.cell-content-area {
+  position: relative;
   width: 100%;
-  background-color: #37414b;
 }

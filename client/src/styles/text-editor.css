@@ -1,55 +1,180 @@
-.w-md-editor .title {
-  line-height: unset;
-  font-size: unset;
-  font-weight: unset;
-  color: #d4d4d4 !important;
-}
-.w-md-editor ul {
-  line-height: 1;
-}
-.text-editor .w-md-editor-bar svg {
-  display: none;
-}
-.text-editor .w-md-editor-bar {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-  height: 11px;
-  cursor: row-resize;
-  background-color: #37414b;
-  background-repeat: no-repeat;
-  background-position: 50%;
-  width: 100%;
+/* Text / Markdown Editor */
+.text-editor {
   position: relative;
+  background: var(--bg-card);
+  transition: all var(--transition-fast);
 }
-.text-editor em {
-  font-style: italic;
+
+/* View Mode Card */
+.text-editor-view {
+  padding: 18px 24px;
+  cursor: pointer;
+  min-height: 80px;
+  position: relative;
+  transition: background-color var(--transition-fast);
 }
-.text-editor .wmde-markdown hr {
-  border-top: 1px solid #dee5ed;
+
+.text-editor-view:hover {
+  background-color: var(--bg-card-hover);
 }
-.text-editor .wmde-markdown ol {
-  list-style: decimal;
+
+.text-editor-hint {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-button-ghost);
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
-.text-editor .w-md-editor-show-live {
-  /* Hide menu bar buttons to prevent accidental delete */
-  z-index: 20;
+
+.text-editor-view:hover .text-editor-hint {
+  opacity: 1;
 }
-.text-editor .w-md-editor-toolbar {
-  background-color: #37414b;
-  border-bottom: 1px solid gray;
+
+/* Markdown Content Styling */
+.wmde-markdown {
+  background: transparent !important;
+  color: var(--text-main) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
 }
-.text-editor .w-md-editor-toolbar li button {
-  color: #d4d4d4;
+
+.wmde-markdown h1,
+.wmde-markdown h2,
+.wmde-markdown h3,
+.wmde-markdown h4,
+.wmde-markdown h5,
+.wmde-markdown h6 {
+  font-family: var(--font-heading) !important;
+  color: var(--text-main) !important;
+  border-bottom-color: var(--border-subtle) !important;
+  font-weight: 700 !important;
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
 }
-.text-editor .w-md-editor-content {
-  background-color: #202123;
+
+.wmde-markdown h1 { font-size: 24px !important; }
+.wmde-markdown h2 { font-size: 20px !important; }
+.wmde-markdown h3 { font-size: 16px !important; }
+
+.wmde-markdown p {
+  color: var(--text-main) !important;
+  margin-bottom: 12px !important;
 }
-.text-editor .w-md-editor,
-.text-editor .w-md-editor .w-md-editor-text-pre {
-  color: #d4d4d4;
+
+.wmde-markdown code {
+  background: var(--bg-button-ghost-hover) !important;
+  color: var(--primary) !important;
+  padding: 2px 6px !important;
+  border-radius: var(--radius-xs) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 12.5px !important;
 }
-.text-editor .w-md-editor-text-pre .bold {
-  color: unset;
+
+.wmde-markdown pre {
+  background: var(--bg-card-secondary) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 14px !important;
 }
-.text-editor .token.list.punctuation {
-  background-color: unset;
+
+.wmde-markdown pre code {
+  background: transparent !important;
+  color: var(--text-code) !important;
+  padding: 0 !important;
+}
+
+.wmde-markdown blockquote {
+  border-left: 3px solid var(--primary) !important;
+  color: var(--text-secondary) !important;
+  padding-left: 14px !important;
+  margin: 12px 0 !important;
+}
+
+.wmde-markdown ul,
+.wmde-markdown ol {
+  padding-left: 20px !important;
+  color: var(--text-main) !important;
+  margin-bottom: 12px !important;
+}
+
+.wmde-markdown li {
+  margin-bottom: 4px !important;
+}
+
+.wmde-markdown table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 14px 0 !important;
+}
+
+.wmde-markdown th,
+.wmde-markdown td {
+  border: 1px solid var(--border-medium) !important;
+  padding: 8px 12px !important;
+}
+
+.wmde-markdown th {
+  background: var(--bg-card-header) !important;
+  font-weight: 600 !important;
+}
+
+.wmde-markdown a {
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+}
+
+/* Edit Mode Styling */
+.text-editor-edit {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  overflow: hidden;
+}
+
+.w-md-editor {
+  background-color: var(--bg-card) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.w-md-editor-toolbar {
+  background-color: var(--bg-card-header) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  padding: 6px 12px !important;
+}
+
+.w-md-editor-toolbar li button {
+  color: var(--text-secondary) !important;
+  border-radius: var(--radius-xs) !important;
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.w-md-editor-toolbar li button:hover {
+  background-color: var(--bg-button-ghost-hover) !important;
+  color: var(--text-main) !important;
+}
+
+.w-md-editor-content {
+  background-color: var(--bg-editor) !important;
+}
+
+.w-md-editor-text-pre,
+.w-md-editor-text-input {
+  font-family: var(--font-mono) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+}
+
+.w-md-editor-text {
+  color: var(--text-main) !important;
+}
+
+.w-md-editor-bar {
+  display: none !important;
 }

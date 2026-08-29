@@ -1,23 +1,79 @@
-.react-resizable-handle {
-  display: block;
-  background-color: #37414b;
-  background-repeat: no-repeat;
-  background-position: 50%;
+/* Resizable Handles */
+.react-resizable {
+  position: relative;
 }
+
+.react-resizable-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 100;
+  transition: background-color var(--transition-fast);
+}
+
 .resize-horizontal {
   display: flex;
   flex-direction: row;
-}
-.react-resizable-handle-s {
-  height: 10px;
-  width: 100%;
-  cursor: row-resize;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-}
-.react-resizable-handle-e {
-  width: 10px;
-  min-width: 10px;
   height: 100%;
+}
+
+/* South / Vertical handle */
+.react-resizable-handle-s {
+  height: 8px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  cursor: row-resize;
+  background-color: var(--border-subtle);
+}
+
+.react-resizable-handle-s::after {
+  content: '';
+  width: 36px;
+  height: 3px;
+  background-color: var(--resize-handle-line);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.react-resizable-handle-s:hover,
+.react-resizable-handle-s:active {
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+.react-resizable-handle-s:hover::after,
+.react-resizable-handle-s:active::after {
+  background-color: var(--primary);
+  width: 48px;
+}
+
+/* East / Horizontal handle */
+.react-resizable-handle-e {
+  width: 8px;
+  height: 100%;
+  right: 0;
+  top: 0;
   cursor: col-resize;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  background-color: var(--border-subtle);
+}
+
+.react-resizable-handle-e::after {
+  content: '';
+  width: 3px;
+  height: 36px;
+  background-color: var(--resize-handle-line);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.react-resizable-handle-e:hover,
+.react-resizable-handle-e:active {
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+.react-resizable-handle-e:hover::after,
+.react-resizable-handle-e:active::after {
+  background-color: var(--primary);
+  height: 48px;
 }

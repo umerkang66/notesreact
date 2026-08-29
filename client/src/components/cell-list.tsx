@@ -1,26 +1,23 @@
 import '../styles/cell-list.css';
 import { FC, Fragment, useEffect } from 'react';
-// Actions
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
-// Components
 import CellListItem from './cell-list-item';
 import AddCell from './add-cell';
 
 const CellList: FC = () => {
   const cells = useTypedSelector(({ cells: { order, data } }) => {
-    // Get cells according the cellsState.order
     return order.map(id => data[id]).filter(Boolean);
   });
-  const { fetchCells } = useActions();
+  const { fetchCells, insertCellAfter } = useActions();
 
   useEffect(() => {
     fetchCells();
   }, [fetchCells]);
 
-  const renderedCells = cells.map(cell => (
+  const renderedCells = cells.map((cell, index) => (
     <Fragment key={cell.id}>
-      <CellListItem cell={cell} />
+      <CellListItem cell={cell} index={index + 1} />
       <AddCell previousCellId={cell.id} />
     </Fragment>
   ));
@@ -28,7 +25,36 @@ const CellList: FC = () => {
   return (
     <div className="cell-list">
       <AddCell forceVisible={cells.length === 0} previousCellId={null} />
-      {renderedCells}
+      
+      {cells.length === 0 ? (
+        <div className="empty-notebook">
+          <div className="empty-notebook-icon">
+            <i className="fas fa-layer-group"></i>
+          </div>
+          <h2 className="empty-notebook-title">Your notebook is empty</h2>
+          <p className="empty-notebook-desc">
+            Start coding interactively in JavaScript & React, or write beautiful documentation using Markdown.
+          </p>
+          <div className="empty-notebook-actions">
+            <button
+              className="btn-pill-code"
+              onClick={() => insertCellAfter(null, 'code')}
+            >
+              <i className="fas fa-code"></i>
+              Add First Code Cell
+            </button>
+            <button
+              className="btn-pill-text"
+              onClick={() => insertCellAfter(null, 'text')}
+            >
+              <i className="fas fa-align-left"></i>
+              Add First Text Cell
+            </button>
+          </div>
+        </div>
+      ) : (
+        renderedCells
+      )}
     </div>
   );
 };

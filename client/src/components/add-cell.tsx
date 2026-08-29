@@ -14,28 +14,26 @@ const AddCell: FC<AddCellProps> = ({
   const { insertCellAfter } = useActions();
 
   return (
-    <div className={`add-cell ${forceVisible && 'force-visible'}`}>
+    <div className={`add-cell ${forceVisible ? 'force-visible' : ''}`}>
+      <div className="divider-line" />
       <div className="add-buttons">
         <button
-          className="button is-rounded is-primary is-small"
+          className="btn-add code-btn"
           onClick={() => insertCellAfter(previousCellId, 'code')}
+          title="Insert JavaScript/React code cell"
         >
-          <span className="icon is-small">
-            <i className="fas fa-plus"></i>
-          </span>
+          <i className="fas fa-plus"></i>
           <span>Code</span>
         </button>
         <button
-          className="button is-rounded is-primary is-small"
+          className="btn-add text-btn"
           onClick={() => insertCellAfter(previousCellId, 'text')}
+          title="Insert Markdown documentation cell"
         >
-          <span className="icon is-small">
-            <i className="fas fa-plus"></i>
-          </span>
+          <i className="fas fa-plus"></i>
           <span>Text</span>
         </button>
       </div>
-      <div className="divider"></div>
     </div>
   );
 };

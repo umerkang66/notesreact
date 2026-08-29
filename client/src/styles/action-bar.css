@@ -1,11 +1,30 @@
+/* Action Bar */
 .action-bar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 100;
-  opacity: 0.5;
-  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
-.action-bar:hover {
-  opacity: 1;
+
+.action-bar .action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  color: var(--text-secondary);
+  background: var(--bg-button-ghost);
+  border: 1px solid var(--border-subtle);
+  font-size: 11px;
+  transition: all var(--transition-fast);
+}
+
+.action-bar .action-btn:hover {
+  background: var(--bg-button-ghost-hover);
+  color: var(--text-main);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+}
+
+.action-bar .action-btn.delete-btn:hover {
+  background: var(--danger-light);
+  color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.3);
 }

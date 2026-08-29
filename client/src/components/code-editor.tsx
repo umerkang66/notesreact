@@ -4,6 +4,7 @@ import { editor } from 'monaco-editor';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import { useTheme } from '../context/theme-context';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -11,16 +12,13 @@ interface CodeEditorProps {
 }
 
 const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
+  const { theme } = useTheme();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   const onEditorDidMount: EditorDidMount = (getEditorValue, monacoEditor) => {
     editorRef.current = monacoEditor;
 
-    // getEditorValue() will return the value on first time, when component is mounted, but we need the value when the text in editor is changes, thats where second argument comes in
-
-    // monacoEditor is the reference to the editor itself
     monacoEditor.onDidChangeModelContent(() => {
-      // When something changes in the editor, get the value again
       onChange(getEditorValue());
     });
 
@@ -30,54 +28,59 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onFormatClick = () => {
     if (!editorRef.current) return;
 
-    // Get current value
     const unformatted = editorRef.current.getModel()?.getValue();
-
     if (typeof unformatted === 'undefined') return;
 
-    // Format the value
-    const formatted = prettier
-      .format(unformatted, {
-        parser: 'babel',
-        plugins: [parser],
-        useTabs: false,
-        semi: true,
-        singleQuote: true,
-        arrowParens: 'avoid',
-      })
-      .replace(/\n$/, '');
+    try {
+      const formatted = prettier
+        .format(unformatted, {
+          parser: 'babel',
+          plugins: [parser],
+          useTabs: false,
+          semi: true,
+          singleQuote: true,
+          arrowParens: 'avoid',
+        })
+        .replace(/\n$/, '');
 
-    // Set the formatted value back in the editor
-    editorRef.current.setValue(formatted);
+      editorRef.current.setValue(formatted);
+    } catch (e) {
+      // If code has syntax errors while typing, do nothing gracefully
+    }
   };
 
   return (
     <div className="editor-wrapper">
       <button
-        className="button button-format is-primary is-small"
+        className="button-format"
         onClick={onFormatClick}
+        title="Format code with Prettier"
       >
+        <i className="fas fa-magic" style={{ marginRight: '4px' }}></i>
         Format
       </button>
       <MonacoEditor
         editorDidMount={onEditorDidMount}
-        theme="dark"
+        theme={theme === 'dark' ? 'vs-dark' : 'light'}
         height="100%"
         language="javascript"
-        // This value is just initial value, this is not used after that (in textarea it is also used after that)
         value={initialValue}
         options={{
-          // These the options of not react component, but underlying MonacoEditor
           wordWrap: 'on',
           minimap: { enabled: false },
           showUnused: false,
-          folding: false,
+          folding: true,
           lineNumbersMinChars: 3,
-          fontSize: 14,
-          fontWeight: '600',
+          fontSize: 13.5,
+          fontWeight: '500',
           scrollBeyondLastLine: false,
-          fontFamily: 'jetBrains Mono, Consolas',
+          fontFamily: "'Fira Code', 'JetBrains Mono', Consolas, monospace",
+          fontLigatures: true,
+          cursorBlinking: 'smooth',
+          smoothScrolling: true,
+          renderLineHighlight: 'all',
           automaticLayout: true,
+          padding: { top: 12, bottom: 12 },
         }}
       />
     </div>

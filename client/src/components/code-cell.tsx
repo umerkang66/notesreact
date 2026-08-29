@@ -1,5 +1,3 @@
-// CodeCell component will communicate back and forth between CodeEditor and Preview Window
-
 import '../styles/code-cell.css';
 import { FC, useEffect } from 'react';
 
@@ -22,14 +20,10 @@ interface CodeCellProps {
 
 const CodeCell: FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, bundleCode } = useActions();
-  // Get bundle code of the current cell
   const bundle = useTypedSelector(({ bundles }) => bundles[cell.id]);
   const cumulativeCode = useCumulativeCode(cell.id);
 
-  // IMPORTANT! use-actions give us slightly different version of actions every time, not the same as we defined in action creators file, when new state is created, this component is re-rendered, hence use-action is called, which gives us a again different version of action, thus action change on every re-render then this useEffect will run infinitely
-  // To fix this issue make sure to not provide the slightly different version of bundle code every time
   useEffect(() => {
-    // First time bundling (when there is no code) shouldn't wait bundle the code, and immediately return it
     if (!bundle) {
       bundleCode(cell.id, cumulativeCode);
       return;
@@ -37,25 +31,17 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
 
     const timer = setTimeout(() => {
       bundleCode(cell.id, cumulativeCode);
-    }, 1000);
+    }, 750);
 
-    // This will be called automatically next time when useEffect is called
     return () => {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bundleCode, cumulativeCode, cell.id]);
 
-  // I want to make resizable the entire code cell, and only vertical direction
   return (
     <Resizable direction="vertical">
-      <div
-        style={{
-          height: 'calc(100% - 10px)',
-          display: 'flex',
-          flexDirection: 'row',
-        }}
-      >
+      <div className="code-cell-container">
         <Resizable direction="horizontal">
           <CodeEditor
             initialValue={cell.content}
@@ -65,9 +51,8 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
         <div className="progress-wrapper">
           {!bundle || bundle.loading ? (
             <div className="progress-cover">
-              <progress className="progress is-small is-primary" max="100">
-                Loading...
-              </progress>
+              <div className="loader-spinner" />
+              <span className="loader-text">Compiling bundle...</span>
             </div>
           ) : (
             <Preview code={bundle.code} err={bundle.err} />

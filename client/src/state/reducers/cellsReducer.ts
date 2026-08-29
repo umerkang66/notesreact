@@ -6,10 +6,8 @@ import { CellInterface } from '../CellInterface';
 interface CellsState {
   loading: boolean;
   error: string | null;
-  // Array of ids
   order: string[];
   data: {
-    // It will be an object, with keys will be ids of individual cells, and as values the Cell itself
     [key: string]: CellInterface;
   };
 }
@@ -19,32 +17,91 @@ const defaultStarterCells: CellInterface[] = [
     id: 'intro-cell',
     type: 'text',
     content:
-      '# notesreact\n\nThis is an interactive coding environment. You can write JavaScript and React, see it executed live, and write comprehensive documentation using markdown.\n\n- Click any text cell to edit it.\n- Click **+ Code** to add a new code cell.\n- Call `show(<Component />)` to render React components to the preview window.',
+      '# notesreact\n\nWelcome to your browser-based interactive workspace! Here you can write executable JavaScript, build dynamic React UI components with live reloading, and document your projects with full Markdown.\n\n### 🚀 Quick Highlights\n- **Live React Rendering**: Call `show(<YourComponent />)` to instantly render React elements in the output window.\n- **Direct npm Imports**: `import axios from "axios"` or `import lodash from "lodash"` — packages are dynamically resolved on the fly!\n- **Cumulative Scope**: Any variable, function, or component defined in an earlier code cell is directly accessible in subsequent cells.\n- **Light & Dark Theme**: Toggle themes seamlessly from the top right sun/moon control.',
   },
   {
     id: 'counter-cell',
     type: 'code',
     content: `import { useState } from 'react';
 
-const Counter = () => {
+const App = () => {
   const [count, setCount] = useState(0);
 
   return (
-    <div style={{ textAlign: 'center', fontFamily: 'sans-serif', padding: '24px' }}>
-      <h2>Interactive Counter</h2>
-      <h1 style={{ fontSize: '48px', margin: '16px 0', color: count >= 0 ? '#3182ce' : '#e53e3e' }}>
+    <div style={{
+      fontFamily: 'Inter, system-ui, sans-serif',
+      padding: '24px',
+      borderRadius: '12px',
+      background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+      color: 'white',
+      maxWidth: '360px',
+      margin: '0 auto',
+      boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.4)',
+      textAlign: 'center'
+    }}>
+      <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600 }}>
+        ✨ Live React Demo
+      </h3>
+      <p style={{ margin: '0 0 16px 0', fontSize: '13px', opacity: 0.9 }}>
+        Click the buttons to test real-time state!
+      </p>
+      <div style={{
+        fontSize: '44px',
+        fontWeight: 800,
+        margin: '12px 0',
+        letterSpacing: '-0.02em'
+      }}>
         {count}
-      </h1>
-      <div>
-        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(c => c - 1)}>-</button>
-        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(0)}>Reset</button>
-        <button style={{ padding: '8px 16px', margin: '0 4px', cursor: 'pointer' }} onClick={() => setCount(c => c + 1)}>+</button>
+      </div>
+      <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+        <button
+          onClick={() => setCount(c => c - 1)}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            background: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          - Decrement
+        </button>
+        <button
+          onClick={() => setCount(0)}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            background: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          Reset
+        </button>
+        <button
+          onClick={() => setCount(c => c + 1)}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            background: 'white',
+            color: '#6366f1',
+            fontWeight: 700,
+            cursor: 'pointer'
+          }}
+        >
+          + Increment
+        </button>
       </div>
     </div>
   );
 };
 
-show(<Counter />);`,
+show(<App />);`,
   },
 ];
 
@@ -76,7 +133,6 @@ const cellsReducer = produce(
           acc[cell.id] = cell;
           return acc;
         }, {} as CellsState['data']);
-
         return state;
 
       case ActionType.FETCH_CELLS_ERROR:
@@ -97,51 +153,36 @@ const cellsReducer = produce(
         return state;
 
       case ActionType.DELETE_CELL:
-        // Delete in state.data obj
         delete state.data[action.payload];
-        // Delete in state.order array
         state.order = state.order.filter(cellId => cellId !== action.payload);
         return state;
 
       case ActionType.MOVE_CELL:
         const { direction } = action.payload;
-        // Find the index of cell in state.order that we want to move
         const index = state.order.findIndex(id => id === action.payload.id);
-        // New index of the cell that needs to move
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
-        // Check if target index is not outside the bounds of the state.order array
         if (targetIndex < 0 || targetIndex > state.order.length - 1)
           return state;
-        // Do swapping logic
-        // Temp is current cell that we are swapping
         const temp = state.order[index];
-        // Cell that is present on target index, move that to the position of current cell
         state.order[index] = state.order[targetIndex];
-        // Target index is where the cell that needs to move should be placed, we have stored the reference to that in "temp"
         state.order[targetIndex] = temp;
         return state;
 
       case ActionType.INSERT_CELL_AFTER:
-        // Create new cell
         const cell: CellInterface = {
           content: '',
           id: randomId(),
           type: action.payload.type,
         };
-        // Add in state.data
         state.data[cell.id] = cell;
-        // Add in order array
 
-        // Before this action.payload.id is where the new cell should be inserted, if it is null add the new cell at the end of array
         const foundIndex = state.order.findIndex(
           id => id === action.payload.id
         );
 
-        // If found index is -1, add the new cell at the end of array
         if (foundIndex === -1) {
           state.order.unshift(cell.id);
         } else {
-          // Add before id that is provided in action.payload
           state.order.splice(foundIndex + 1, 0, cell.id);
         }
         return state;
@@ -153,8 +194,7 @@ const cellsReducer = produce(
 );
 
 function randomId(): string {
-  // base 36 means all the numbers from zero to 9, and all the letters from a to z
-  return Math.random().toString(36).substring(2, 5);
+  return Math.random().toString(36).substring(2, 6);
 }
 
 export default cellsReducer;

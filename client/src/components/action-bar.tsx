@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useActions } from '../hooks/use-actions';
 
 interface ActionBarProps {
-  // This is the id of cell to which cell this action Bar will be displayed
   id: string;
 }
 
@@ -13,28 +12,25 @@ const ActionBar: FC<ActionBarProps> = ({ id }) => {
   return (
     <div className="action-bar">
       <button
-        className="button is-primary is-small"
+        className="action-btn"
         onClick={() => moveCell(id, 'up')}
+        title="Move cell up"
       >
-        <span className="icon">
-          <i className="fas fa-arrow-up"></i>
-        </span>
+        <i className="fas fa-arrow-up"></i>
       </button>
       <button
-        className="button is-primary is-small"
+        className="action-btn"
         onClick={() => moveCell(id, 'down')}
+        title="Move cell down"
       >
-        <span className="icon">
-          <i className="fas fa-arrow-down"></i>
-        </span>
+        <i className="fas fa-arrow-down"></i>
       </button>
       <button
-        className="button is-primary is-small"
+        className="action-btn delete-btn"
         onClick={() => deleteCell(id)}
+        title="Delete cell"
       >
-        <span className="icon">
-          <i className="fas fa-times"></i>
-        </span>
+        <i className="fas fa-trash-alt"></i>
       </button>
     </div>
   );

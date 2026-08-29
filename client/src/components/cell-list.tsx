@@ -6,14 +6,21 @@ import CellListItem from './cell-list-item';
 import AddCell from './add-cell';
 
 const CellList: FC = () => {
-  const cells = useTypedSelector(({ cells: { order, data } }) => {
-    return order.map(id => data[id]).filter(Boolean);
+  const { cells, loading } = useTypedSelector(({ cells: { order, data, loading } }) => {
+    return {
+      cells: order.map(id => data[id]).filter(Boolean),
+      loading,
+    };
   });
   const { fetchCells, insertCellAfter } = useActions();
 
   useEffect(() => {
     fetchCells();
   }, [fetchCells]);
+
+  if (loading && cells.length === 0) {
+    return null;
+  }
 
   const renderedCells = cells.map((cell, index) => (
     <Fragment key={cell.id}>
@@ -25,7 +32,7 @@ const CellList: FC = () => {
   return (
     <div className="cell-list">
       <AddCell forceVisible={cells.length === 0} previousCellId={null} />
-      
+
       {cells.length === 0 ? (
         <div className="empty-notebook">
           <div className="empty-notebook-icon">
@@ -33,7 +40,7 @@ const CellList: FC = () => {
           </div>
           <h2 className="empty-notebook-title">Your notebook is empty</h2>
           <p className="empty-notebook-desc">
-            Start coding interactively in JavaScript & React, or write beautiful documentation using Markdown.
+            Start coding interactively in JavaScript & React, or write documentation using Markdown.
           </p>
           <div className="empty-notebook-actions">
             <button

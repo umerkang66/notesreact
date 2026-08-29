@@ -5,6 +5,7 @@ import {
   UpdateCellAction,
   MoveCellAction,
   DeleteCellAction,
+  ResetCellsAction,
   InsertCellAfterAction,
   BundleStartAction,
   BundleCompleteAction,
@@ -32,6 +33,10 @@ export const deleteCell = (id: string): DeleteCellAction => {
   return { type: ActionType.DELETE_CELL, payload: id };
 };
 
+export const resetCells = (): ResetCellsAction => {
+  return { type: ActionType.RESET_CELLS };
+};
+
 export const moveCell = (id: string, direction: Direction): MoveCellAction => {
   return {
     type: ActionType.MOVE_CELL,
@@ -49,9 +54,7 @@ export const insertCellAfter = (
   return {
     type: ActionType.INSERT_CELL_AFTER,
     payload: {
-      // To which cell it should be inserted before
       id,
-      // What type of cell should be inserted, 'code' or 'text'
       type,
     },
   };
@@ -59,8 +62,6 @@ export const insertCellAfter = (
 
 export const bundleCode = (cellId: string, input: string) => {
   return async (dispatch: Dispatch<Actions>) => {
-    // Dispatch the start bundle action creator
-    // Provide generic type was not necessary because we already provide it in Dispatch<>
     dispatch<BundleStartAction>({
       type: ActionType.BUNDLE_START,
       payload: {
@@ -70,8 +71,6 @@ export const bundleCode = (cellId: string, input: string) => {
 
     const result = await bundler(input);
 
-    // Dispatch the complete bundle action creator
-    // Provide generic type was not necessary because we already provide it in Dispatch<>
     dispatch<BundleCompleteAction>({
       type: ActionType.BUNDLE_COMPLETE,
       payload: {
@@ -86,7 +85,6 @@ export const bundleCode = (cellId: string, input: string) => {
 };
 
 export const fetchCells = () => async (dispatch: Dispatch<Actions>) => {
-  // flip the loading flag to true in reducer
   dispatch({ type: ActionType.FETCH_CELLS });
 
   try {

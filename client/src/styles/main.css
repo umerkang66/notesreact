@@ -208,6 +208,25 @@ button:disabled {
   transform: translateY(0);
 }
 
+/* Danger Button */
+.btn-danger {
+  background: var(--danger);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+.btn-danger:hover {
+  background: var(--danger-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+.btn-danger:active {
+  transform: translateY(0);
+}
+
 /* Ghost Button */
 .btn-ghost {
   background: var(--bg-button-ghost);

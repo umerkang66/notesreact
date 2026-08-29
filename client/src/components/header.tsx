@@ -1,11 +1,14 @@
 import React, { FC, useState } from 'react';
 import '../styles/header.css';
 import { useTheme } from '../context/theme-context';
+import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 
 const Header: FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { resetCells } = useActions();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const cells = useTypedSelector(({ cells: { order, data } }) => {
     return order.map(id => data[id]).filter(Boolean);
@@ -20,6 +23,11 @@ const Header: FC = () => {
     a.download = `notesreact-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleResetConfirm = () => {
+    resetCells();
+    setShowResetConfirm(false);
   };
 
   return (
@@ -42,6 +50,14 @@ const Header: FC = () => {
         </button>
 
         <button
+          className="btn-icon danger"
+          onClick={() => setShowResetConfirm(true)}
+          title="Reset Notebook (Clear all cells)"
+        >
+          <i className="fas fa-rotate-left"></i>
+        </button>
+
+        <button
           className="theme-toggle-btn"
           onClick={toggleTheme}
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
@@ -54,6 +70,46 @@ const Header: FC = () => {
           )}
         </button>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="modal-overlay" onClick={() => setShowResetConfirm(false)}>
+          <div className="modal-content" style={{ maxWidth: '440px' }} onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>
+                <i className="fas fa-exclamation-triangle" style={{ color: 'var(--danger)' }}></i>
+                Reset Notebook?
+              </h3>
+              <button
+                className="btn-icon"
+                onClick={() => setShowResetConfirm(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: '1.6', marginBottom: '20px' }}>
+                Are you sure you want to remove all cells from the notebook? This action cannot be undone.
+              </p>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                <button
+                  className="btn-ghost"
+                  onClick={() => setShowResetConfirm(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-danger"
+                  onClick={handleResetConfirm}
+                >
+                  <i className="fas fa-trash-alt"></i>
+                  Reset All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Keyboard Shortcuts Modal */}
       {showShortcuts && (

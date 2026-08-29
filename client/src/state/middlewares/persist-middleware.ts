@@ -9,16 +9,21 @@ type Store = {
   getState(): RootState;
 };
 
-// First function receives an obj like store, that has dispatch property
 export const persistMiddleware = ({ dispatch, getState }: Store) => {
   let timer: NodeJS.Timeout;
 
-  // Second function receive next function
   return (next: (action: Actions) => void) => {
-    // Third function receives action obj
     return (action: Actions) => {
-      // We are not stop or modifying any action
       next(action);
+
+      if (action.type === ActionType.RESET_CELLS) {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        // Save immediately on reset without debounce
+        saveCells()(dispatch, getState);
+        return;
+      }
 
       if (
         [
@@ -29,12 +34,9 @@ export const persistMiddleware = ({ dispatch, getState }: Store) => {
         ].includes(action.type)
       ) {
         if (timer) {
-          // if we end up calling this timer again within those 250 milliseconds, then clear the timer
           clearTimeout(timer);
         }
         timer = setTimeout(() => {
-          // only save if these actions are called
-          // we don't have to call dispatch, because save is wired up for thunk, that automatically call dispatch,
           saveCells()(dispatch, getState);
         }, 250);
       }

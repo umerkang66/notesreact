@@ -20,7 +20,7 @@ export const fetchPlugin = (userCode: string) => {
 
         // IMPORTANT! In onResolve args.path is package name, but in onLoad args.path is package path on npm
         return {
-          loader: 'jsx',
+          loader: 'tsx',
           contents: userCode,
         };
       });

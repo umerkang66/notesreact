@@ -3,7 +3,8 @@ import { FC, useEffect, useRef } from 'react';
 import { editor } from 'monaco-editor';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
-import parser from 'prettier/parser-babel';
+import parserBabel from 'prettier/parser-babel';
+import parserTypeScript from 'prettier/parser-typescript';
 import { useTheme } from '../context/theme-context';
 import { registerGithubThemes } from '../utils/github-themes';
 
@@ -28,9 +29,54 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onEditorDidMount: EditorDidMount = (getEditorValue, monacoEditor) => {
     editorRef.current = monacoEditor;
 
-    if ((window as any).monaco) {
-      registerGithubThemes((window as any).monaco);
-      (window as any).monaco.editor.setTheme(activeTheme);
+    const monacoInstance = (window as any).monaco;
+    if (monacoInstance) {
+      registerGithubThemes(monacoInstance);
+      monacoInstance.editor.setTheme(activeTheme);
+
+      // Configure TypeScript / JavaScript compiler options
+      monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: monacoInstance.languages.typescript.ScriptTarget.ES2020,
+        allowNonTsExtensions: true,
+        moduleResolution: monacoInstance.languages.typescript.ModuleResolutionKind.NodeJs,
+        module: monacoInstance.languages.typescript.ModuleKind.CommonJS,
+        noEmit: true,
+        jsx: monacoInstance.languages.typescript.JsxEmit.React,
+        jsxFactory: 'React.createElement',
+        reactNamespace: 'React',
+        allowJs: true,
+        checkJs: false,
+        esModuleInterop: true,
+        typeRoots: ['node_modules/@types'],
+      });
+
+      monacoInstance.languages.typescript.javascriptDefaults.setCompilerOptions({
+        target: monacoInstance.languages.typescript.ScriptTarget.ES2020,
+        allowNonTsExtensions: true,
+        moduleResolution: monacoInstance.languages.typescript.ModuleResolutionKind.NodeJs,
+        module: monacoInstance.languages.typescript.ModuleKind.CommonJS,
+        noEmit: true,
+        jsx: monacoInstance.languages.typescript.JsxEmit.React,
+        jsxFactory: 'React.createElement',
+        reactNamespace: 'React',
+        allowJs: true,
+        checkJs: false,
+        esModuleInterop: true,
+      });
+
+      monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: false,
+        noSyntaxValidation: false,
+      });
+
+      // Provide global ambient type definitions for show() and React
+      monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
+        `
+        declare function show(value: any): void;
+        declare const React: any;
+        `,
+        'ts:filename/globals.d.ts'
+      );
     }
 
     monacoEditor.onDidChangeModelContent(() => {
@@ -49,8 +95,8 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     try {
       const formatted = prettier
         .format(unformatted, {
-          parser: 'babel',
-          plugins: [parser],
+          parser: 'typescript',
+          plugins: [parserTypeScript, parserBabel],
           useTabs: false,
           semi: true,
           singleQuote: true,
@@ -60,7 +106,20 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
 
       editorRef.current.setValue(formatted);
     } catch (e) {
-      // If code has syntax errors while typing, do nothing gracefully
+      // If code has syntax errors while typing, fallback to babel parser or do nothing gracefully
+      try {
+        const formatted = prettier
+          .format(unformatted, {
+            parser: 'babel',
+            plugins: [parserBabel],
+            useTabs: false,
+            semi: true,
+            singleQuote: true,
+            arrowParens: 'avoid',
+          })
+          .replace(/\n$/, '');
+        editorRef.current.setValue(formatted);
+      } catch (err) {}
     }
   };
 
@@ -78,7 +137,7 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
         editorDidMount={onEditorDidMount}
         theme={activeTheme}
         height="100%"
-        language="javascript"
+        language="typescript"
         value={initialValue}
         options={{
           wordWrap: 'on',

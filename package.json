@@ -1,6 +1,6 @@
 {
   "name": "notesreact",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Interactive browser-based JavaScript,Typescript and React notebook CLI",
   "publishConfig": {
     "access": "public"

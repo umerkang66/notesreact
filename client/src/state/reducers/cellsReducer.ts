@@ -18,13 +18,14 @@ const defaultStarterCells: CellInterface[] = [
     type: 'text',
     content: `# notesreact Interactive Notebook
 
-Welcome to **notesreact** — an interactive coding environment for modern JavaScript, React, and Markdown.
+Welcome to **notesreact** — an interactive coding environment for modern **JavaScript**, **TypeScript**, **React**, and **Markdown**.
 
 ### Key Features
-- **Live React Execution**: Call \`show(<Component />)\` to render any React element or JS value directly.
+- **JavaScript & TypeScript Dual Support**: Write pure ES6+ JavaScript or full TypeScript (interfaces, generics, type annotations, enums) in any code cell.
+- **Live React & TSX Execution**: Call \`show(<Component />)\` to render any React element or value directly.
 - **On-Demand npm Imports**: Directly \`import axios from 'axios'\` or any npm library (automatically fetched via unpkg).
-- **Tailwind CSS Ready**: Write standard Tailwind utility classes in your components.
-- **Cumulative Scope**: Functions, variables, and imported packages declared in previous cells remain accessible in later cells.
+- **Tailwind CSS Ready**: Write standard Tailwind utility classes in your components (\`import 'tailwindcss'\`).
+- **Cumulative Scope**: Functions, variables, types, and imported packages declared in previous cells remain accessible in later cells.
 - **Rich Markdown**: Click any text cell to edit notes, formulas, and documentation.`,
   },
   {
@@ -32,7 +33,7 @@ Welcome to **notesreact** — an interactive coding environment for modern JavaS
     type: 'code',
     content: `import { useState } from 'react';
 
-// 1. Plain React Counter
+// 1. Plain React Counter (JavaScript)
 const PlainCounter = () => {
   const [count, setCount] = useState(0);
 
@@ -311,6 +312,107 @@ const TailwindCard = () => {
 };
 
 show(<TailwindCard />);`,
+  },
+  {
+    id: 'typescript-cell',
+    type: 'code',
+    content: `import type { FC } from 'react';
+import { useState } from 'react';
+
+// 5. TypeScript & TSX Component with Interfaces & Generics
+interface TaskItem {
+  id: number;
+  title: string;
+  category: 'Feature' | 'Bug' | 'Docs';
+  done: boolean;
+}
+
+interface TaskListProps {
+  initialTasks: TaskItem[];
+}
+
+const TaskManager: FC<TaskListProps> = ({ initialTasks }: TaskListProps) => {
+  const [tasks, setTasks] = useState<TaskItem[]>(initialTasks);
+  const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
+
+  const toggleTask = (id: number): void => {
+    setTasks(prev =>
+      prev.map(t => (t.id === id ? { ...t, done: !t.done } : t))
+    );
+  };
+
+  const filtered: TaskItem[] = tasks.filter((t: TaskItem) => {
+    if (filter === 'pending') return !t.done;
+    if (filter === 'completed') return t.done;
+    return true;
+  });
+
+  return (
+    <div style={{ fontFamily: 'system-ui, sans-serif', padding: '20px', maxWidth: '420px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+        <h4 style={{ margin: 0, color: '#0f172a' }}>TypeScript Task Manager</h4>
+        <span style={{ fontSize: '11px', background: '#dbeafe', color: '#1d4ed8', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+          TSX
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '12px' }}>
+        {(['all', 'pending', 'completed'] as const).map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            style={{
+              padding: '4px 10px',
+              fontSize: '12px',
+              borderRadius: '6px',
+              border: '1px solid #cbd5e1',
+              background: filter === f ? '#2563eb' : '#ffffff',
+              color: filter === f ? '#ffffff' : '#475569',
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+            }}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        {filtered.map((item: TaskItem) => (
+          <div
+            key={item.id}
+            onClick={() => toggleTask(item.id)}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '6px',
+              border: '1px solid #e2e8f0',
+              background: item.done ? '#f8fafc' : '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{ textDecoration: item.done ? 'line-through' : 'none', color: item.done ? '#94a3b8' : '#1e293b', fontSize: '13px' }}>
+              {item.done ? '✅' : '⭕'} {item.title}
+            </span>
+            <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '4px', background: '#f1f5f9', color: '#64748b' }}>
+              {item.category}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const sampleTasks: TaskItem[] = [
+  { id: 1, title: 'Add TypeScript Support', category: 'Feature', done: true },
+  { id: 2, title: 'Test Generics & Interfaces', category: 'Feature', done: true },
+  { id: 3, title: 'Deploy Notebook Update', category: 'Docs', done: false },
+];
+
+show(<TaskManager initialTasks={sampleTasks} />);`,
   },
 ];
 

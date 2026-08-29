@@ -134,10 +134,12 @@
 .text-editor-edit {
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   overflow: hidden;
+  background-color: var(--bg-editor) !important;
 }
 
 .w-md-editor {
-  background-color: var(--bg-card) !important;
+  background-color: var(--bg-editor) !important;
+  color: var(--text-main) !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -151,8 +153,9 @@
 .w-md-editor-toolbar li button {
   color: var(--text-secondary) !important;
   border-radius: var(--radius-xs) !important;
-  height: 26px !important;
-  width: 26px !important;
+  height: 28px !important;
+  width: 28px !important;
+  transition: all var(--transition-fast) !important;
 }
 
 .w-md-editor-toolbar li button:hover {
@@ -160,18 +163,56 @@
   color: var(--text-main) !important;
 }
 
+.w-md-editor-toolbar li.active button {
+  color: var(--primary) !important;
+  background-color: var(--primary-light) !important;
+}
+
 .w-md-editor-content {
+  background-color: var(--bg-editor) !important;
+  color: var(--text-main) !important;
+}
+
+.w-md-editor-area {
   background-color: var(--bg-editor) !important;
 }
 
-.w-md-editor-text-pre,
+.w-md-editor-input {
+  background-color: var(--bg-editor) !important;
+}
+
+/* Ensure Text in Textarea is Crisp and 100% Visible */
 .w-md-editor-text-input {
   font-family: var(--font-mono) !important;
   font-size: 13.5px !important;
   line-height: 1.6 !important;
+  color: var(--text-main) !important;
+  -webkit-text-fill-color: var(--text-main) !important;
+  caret-color: var(--primary) !important;
+  background: transparent !important;
+  padding: 14px 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* Hide overlapping background pre to avoid ghosting or color clashes */
+.w-md-editor-text-pre {
+  display: none !important;
 }
 
 .w-md-editor-text {
+  color: var(--text-main) !important;
+  -webkit-text-fill-color: var(--text-main) !important;
+}
+
+/* Preview pane in split edit mode */
+.w-md-editor-preview {
+  background-color: var(--bg-card) !important;
+  border-left: 1px solid var(--border-subtle) !important;
+  box-shadow: none !important;
+  padding: 14px 20px !important;
+}
+
+.w-md-editor-preview .wmde-markdown {
   color: var(--text-main) !important;
 }
 

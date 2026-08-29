@@ -50,6 +50,7 @@ const getHtml = (hasTailwind: boolean) => `
 
 const Preview: FC<PreviewProps> = ({ code, err }) => {
   const iFrameRef = useRef<HTMLIFrameElement | null>(null);
+  const prevTailwindRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     const iframe = iFrameRef.current;
@@ -61,21 +62,28 @@ const Preview: FC<PreviewProps> = ({ code, err }) => {
       code.includes('tailwind') ||
       code.includes('cdn.tailwindcss.com');
 
-    iframe.srcdoc = getHtml(hasTailwind);
-
     const sendMessage = () => {
       if (iframe && iframe.contentWindow) {
         iframe.contentWindow.postMessage(code, '*');
       }
     };
 
-    iframe.addEventListener('load', sendMessage);
-    const timer = setTimeout(sendMessage, 50);
+    // Only reload the iframe document if tailwind requirement changed or initial mount
+    if (prevTailwindRef.current !== hasTailwind) {
+      prevTailwindRef.current = hasTailwind;
+      iframe.srcdoc = getHtml(hasTailwind);
 
-    return () => {
-      iframe.removeEventListener('load', sendMessage);
-      clearTimeout(timer);
-    };
+      iframe.addEventListener('load', sendMessage);
+      const timer = setTimeout(sendMessage, 50);
+
+      return () => {
+        iframe.removeEventListener('load', sendMessage);
+        clearTimeout(timer);
+      };
+    } else {
+      // Warm iframe: instantly post message without wiping iframe DOM or reloading scripts
+      sendMessage();
+    }
   }, [code]);
 
   return (

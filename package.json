@@ -1,6 +1,6 @@
 {
   "name": "notesreact",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Interactive browser-based JavaScript,Typescript and React notebook CLI",
   "publishConfig": {
     "access": "public"
@@ -19,7 +19,8 @@
     "build:server": "esbuild src/index.ts --platform=node --outfile=dist/index.js --bundle --minify --define:process.env.NODE_ENV=\\\"production\\\"",
     "build": "npm run build:client && npm run build:server",
     "prepublishOnly": "npm run build",
-    "publishnpm": "npm version patch && npm publish"
+    "publishnpm": "npm version patch && npm publish",
+    "pathpush": "npm version patch && git push"
   },
   "keywords": [
     "javascript",

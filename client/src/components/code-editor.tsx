@@ -65,8 +65,15 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
       });
 
       monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: false,
-        noSyntaxValidation: false,
+        noSemanticValidation: true,
+        noSyntaxValidation: true,
+        noSuggestionDiagnostics: true,
+      });
+
+      monacoInstance.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: true,
+        noSuggestionDiagnostics: true,
       });
 
       // Provide global ambient type definitions for show() and React

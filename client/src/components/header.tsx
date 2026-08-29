@@ -52,9 +52,9 @@ const Header: FC = () => {
         <button
           className="btn-icon danger"
           onClick={() => setShowResetConfirm(true)}
-          title="Reset Notebook (Restore default examples)"
+          title="Clear Notebook (Remove all cells)"
         >
-          <i className="fas fa-rotate-left"></i>
+          <i className="fas fa-trash-alt"></i>
         </button>
 
         <button
@@ -71,14 +71,14 @@ const Header: FC = () => {
         </button>
       </div>
 
-      {/* Reset Confirmation Modal */}
+      {/* Clear Notebook Confirmation Modal */}
       {showResetConfirm && (
         <div className="modal-overlay" onClick={() => setShowResetConfirm(false)}>
           <div className="modal-content" style={{ maxWidth: '440px' }} onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>
-                <i className="fas fa-rotate-left" style={{ color: 'var(--primary)' }}></i>
-                Reset to Default Examples?
+                <i className="fas fa-trash-alt" style={{ color: 'var(--danger, #ef4444)' }}></i>
+                Clear All Cells?
               </h3>
               <button
                 className="btn-icon"
@@ -89,7 +89,7 @@ const Header: FC = () => {
             </div>
             <div className="modal-body">
               <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: '1.6', marginBottom: '20px' }}>
-                This will reset your notebook and reload the full suite of starter examples (Plain counter, Styled counter card, Axios API fetcher, and Tailwind dashboard component).
+                This will remove all cells and reset your notebook to 0. You will have a clean, blank workspace to start fresh.
               </p>
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                 <button
@@ -100,10 +100,11 @@ const Header: FC = () => {
                 </button>
                 <button
                   className="btn-primary"
+                  style={{ background: 'var(--danger, #ef4444)', borderColor: 'var(--danger, #ef4444)' }}
                   onClick={handleResetConfirm}
                 >
-                  <i className="fas fa-rotate-left"></i>
-                  Reset & Load Examples
+                  <i className="fas fa-trash-alt"></i>
+                  Clear All Cells
                 </button>
               </div>
             </div>

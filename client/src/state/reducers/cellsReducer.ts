@@ -469,11 +469,8 @@ const cellsReducer = produce(
         return state;
 
       case ActionType.RESET_CELLS:
-        state.order = defaultStarterCells.map(c => c.id);
-        state.data = defaultStarterCells.reduce((acc, cell) => {
-          acc[cell.id] = cell;
-          return acc;
-        }, {} as CellsState['data']);
+        state.order = [];
+        state.data = {};
         return state;
 
       case ActionType.MOVE_CELL:

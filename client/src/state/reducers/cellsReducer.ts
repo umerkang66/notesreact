@@ -67,7 +67,7 @@ show(<Counter />);`,
           fontSize: '40px',
           fontWeight: 700,
           margin: '12px 0',
-          color: count >= 0 ? '#4f46e5' : '#ef4444',
+          color: count >= 0 ? '#2563eb' : '#ef4444',
         }}
       >
         {count}
@@ -104,7 +104,7 @@ show(<Counter />);`,
             padding: '8px 16px',
             borderRadius: '6px',
             border: 'none',
-            background: '#4f46e5',
+            background: '#2563eb',
             color: '#ffffff',
             cursor: 'pointer',
             fontWeight: 600,

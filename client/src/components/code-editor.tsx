@@ -1,10 +1,11 @@
 import '../styles/code-editor.css';
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { editor } from 'monaco-editor';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
 import { useTheme } from '../context/theme-context';
+import { registerGithubThemes } from '../utils/github-themes';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -15,8 +16,22 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const { theme } = useTheme();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
+  const activeTheme = theme === 'dark' ? 'github-dark' : 'github-light';
+
+  useEffect(() => {
+    if ((window as any).monaco) {
+      registerGithubThemes((window as any).monaco);
+      (window as any).monaco.editor.setTheme(activeTheme);
+    }
+  }, [activeTheme]);
+
   const onEditorDidMount: EditorDidMount = (getEditorValue, monacoEditor) => {
     editorRef.current = monacoEditor;
+
+    if ((window as any).monaco) {
+      registerGithubThemes((window as any).monaco);
+      (window as any).monaco.editor.setTheme(activeTheme);
+    }
 
     monacoEditor.onDidChangeModelContent(() => {
       onChange(getEditorValue());
@@ -61,7 +76,7 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
       </button>
       <MonacoEditor
         editorDidMount={onEditorDidMount}
-        theme={theme === 'dark' ? 'vs-dark' : 'light'}
+        theme={activeTheme}
         height="100%"
         language="javascript"
         value={initialValue}

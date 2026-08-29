@@ -7,20 +7,20 @@
   --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
   --font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, Monaco, monospace;
   
-  --primary: #6366f1;
-  --primary-rgb: 99, 102, 241;
-  --primary-hover: #4f46e5;
-  --primary-light: rgba(99, 102, 241, 0.12);
-  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #3b82f6 100%);
-  --brand-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  --primary: #2563eb;
+  --primary-rgb: 37, 99, 235;
+  --primary-hover: #1d4ed8;
+  --primary-light: rgba(37, 99, 235, 0.12);
+  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  --brand-gradient: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
 
   --code-badge-bg: rgba(16, 185, 129, 0.12);
   --code-badge-text: #10b981;
-  --code-badge-border: rgba(16, 185, 129, 0.25);
+  --code-badge-border: rgba(16, 185, 129, 0.28);
 
-  --text-badge-bg: rgba(139, 92, 246, 0.12);
-  --text-badge-text: #a855f7;
-  --text-badge-border: rgba(139, 92, 246, 0.25);
+  --text-badge-bg: rgba(14, 165, 233, 0.12);
+  --text-badge-text: #0284c7;
+  --text-badge-border: rgba(14, 165, 233, 0.28);
 
   --success: #10b981;
   --warning: #f59e0b;
@@ -43,64 +43,73 @@
    DARK THEME (Default)
    -------------------------------------------------------------------------- */
 [data-theme="dark"], body.theme-dark {
-  --bg-app: #090d16;
-  --bg-app-rgb: 9, 13, 22;
-  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-             radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%);
+  --bg-app: #2A343F;
+  --bg-app-rgb: 42, 52, 63;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.07) 0px, transparent 50%),
+             radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.05) 0px, transparent 50%);
   
-  --bg-header: rgba(15, 23, 42, 0.85);
-  --bg-header-solid: #0f172a;
+  --bg-header: rgba(33, 42, 51, 0.88);
+  --bg-header-solid: #212a33;
   
-  --bg-card: #111827;
-  --bg-card-header: #151f33;
-  --bg-card-secondary: #0c1220;
-  --bg-card-hover: #162238;
+  --bg-card: #202832;
+  --bg-card-header: #25303c;
+  --bg-card-secondary: #1a222b;
+  --bg-card-hover: #26313e;
   
-  --bg-editor: #0d121f;
-  --bg-preview-wrapper: #131b2e;
+  --bg-editor: #1e2630;
+  --bg-preview-wrapper: #1a222b;
   --bg-preview: #ffffff;
   
   --bg-button-ghost: rgba(255, 255, 255, 0.06);
   --bg-button-ghost-hover: rgba(255, 255, 255, 0.12);
   --bg-button-ghost-active: rgba(255, 255, 255, 0.18);
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-focus: rgba(99, 102, 241, 0.6);
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-focus: rgba(56, 189, 248, 0.65);
 
-  --text-main: #f8fafc;
+  --primary: #38bdf8;
+  --primary-rgb: 56, 189, 248;
+  --primary-hover: #0ea5e9;
+  --primary-light: rgba(56, 189, 248, 0.14);
+
+  --text-badge-bg: rgba(56, 189, 248, 0.12);
+  --text-badge-text: #38bdf8;
+  --text-badge-border: rgba(56, 189, 248, 0.28);
+
+  --text-main: #f0f6fc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --text-code: #e2e8f0;
+  --text-code: #e6edf3;
 
-  --shadow-card: 0 4px 24px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --shadow-card-hover: 0 12px 36px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(99, 102, 241, 0.35);
-  --shadow-dropdown: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-card-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.35);
+  --shadow-dropdown: 0 14px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.2);
 
-  --resize-handle-bg: #1e293b;
-  --resize-handle-line: #475569;
+  --resize-handle-bg: #273340;
+  --resize-handle-line: #4e6175;
 }
 
 /* --------------------------------------------------------------------------
    LIGHT THEME
    -------------------------------------------------------------------------- */
 [data-theme="light"], body.theme-light {
-  --bg-app: #f8fafc;
-  --bg-app-rgb: 248, 250, 252;
-  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-             radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.04) 0px, transparent 50%);
+  --bg-app: #f6f8fa;
+  --bg-app-rgb: 246, 248, 250;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
+             radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.03) 0px, transparent 50%);
 
-  --bg-header: rgba(255, 255, 255, 0.9);
+  --bg-header: rgba(255, 255, 255, 0.92);
   --bg-header-solid: #ffffff;
 
   --bg-card: #ffffff;
-  --bg-card-header: #f8fafc;
+  --bg-card-header: #f6f8fa;
   --bg-card-secondary: #f1f5f9;
-  --bg-card-hover: #fcfdfe;
+  --bg-card-hover: #f8fafc;
 
   --bg-editor: #ffffff;
-  --bg-preview-wrapper: #f8fafc;
+  --bg-preview-wrapper: #f6f8fa;
   --bg-preview: #ffffff;
 
   --bg-button-ghost: rgba(0, 0, 0, 0.04);
@@ -109,17 +118,26 @@
 
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-medium: rgba(0, 0, 0, 0.14);
-  --border-focus: rgba(99, 102, 241, 0.5);
+  --border-focus: rgba(37, 99, 235, 0.5);
 
-  --text-main: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --text-code: #1e293b;
+  --primary: #2563eb;
+  --primary-rgb: 37, 99, 235;
+  --primary-hover: #1d4ed8;
+  --primary-light: rgba(37, 99, 235, 0.1);
+
+  --text-badge-bg: rgba(14, 165, 233, 0.1);
+  --text-badge-text: #0284c7;
+  --text-badge-border: rgba(14, 165, 233, 0.25);
+
+  --text-main: #1f2328;
+  --text-secondary: #57606a;
+  --text-muted: #8c959f;
+  --text-code: #24292f;
 
   --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.3);
+  --shadow-card-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(37, 99, 235, 0.3);
   --shadow-dropdown: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.12);
+  --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.12);
 
   --resize-handle-bg: #e2e8f0;
   --resize-handle-line: #94a3b8;
@@ -165,7 +183,7 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(56, 189, 248, 0.25);
   color: inherit;
 }
 
@@ -197,12 +215,12 @@ button:disabled {
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 .btn-primary:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 .btn-primary:active {
   transform: translateY(0);

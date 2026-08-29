@@ -32,7 +32,7 @@ notesreact serve
 
 ### 2. Custom Filename & Port
 
-You can specify a custom filename and port:
+You can specify a custom filename and port.
 
 ```bash
 notesreact serve my-notes.json --port 4005

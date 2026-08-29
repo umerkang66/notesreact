@@ -15,7 +15,7 @@ npm install -g notesreact
 Or run directly without global installation using `npx`:
 
 ```bash
-npx notesreact serve
+npx notesreact@latest serve
 ```
 
 ---

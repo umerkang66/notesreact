@@ -10,9 +10,13 @@ const html = `
   <!DOCTYPE html>
   <html>
     <head>
+      <script src="https://cdn.tailwindcss.com"></script>
       <style>
-        html {
+        html, body {
           background-color: white;
+          margin: 0;
+          padding: 0;
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
       </style>
     </head>

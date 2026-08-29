@@ -25,7 +25,7 @@ jobs:
         run: npm ci
 
       - name: Install client dependencies
-        run: npm ci --prefix client
+        run: npm ci --prefix client --force
 
       - name: Build packages (client & server)
         run: npm run build
